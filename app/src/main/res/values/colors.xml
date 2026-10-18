@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Window behind Compose and the launcher icon; screen colours live in ui/theme/Color.kt. -->
+    <color name="window_background">#F2F3F8</color>
+    <color name="ic_launcher_background">#E8577E</color>
+</resources>
