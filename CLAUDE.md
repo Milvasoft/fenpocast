@@ -1,6 +1,6 @@
 # Fenpo Cast
 
-iPhone'dan Android TV'ye ekran yansıtma, müzik ve video. iPhone'a bir şey kurulmaz; TV, iPhone'un yerleşik Ekran Yansıtma ve ses çıkışı listesinde görünür. Fenpo ailesinden ama Fenpo'dan bağımsız bir uygulama ve repo (Fenpo: `Milvasoft/fenpo`). Açık kaynak (GPLv3), sunucusuz, her şey yerel ağda.
+iPhone'dan Android TV'ye ekran yansıtma, müzik ve video. iPhone'a bir şey kurulmaz; TV, iPhone'un yerleşik Ekran Yansıtma ve ses çıkışı listesinde görünür. Fenpo ailesinden ama Fenpo'dan bağımsız bir uygulama ve repo (`Milvasoft/fenpocast`; Fenpo: `Milvasoft/fenpo`). Açık kaynak (GPLv3), sunucusuz, her şey yerel ağda.
 
 ## Önce bunları oku
 

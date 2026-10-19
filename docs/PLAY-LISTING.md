@@ -16,7 +16,7 @@ Play Console'a girilecek her şey bu belgeden kopyalanır. Hesap: Milvasoft (kur
 | Paket dosyası | `./gradlew :app:bundleRelease` → `app/build/outputs/bundle/release/app-release.aab` |
 | İmza | Play App Signing açık; yükleme anahtarı Fenpo for Android'inkiyle aynı (`FENPO_UPLOAD_*`, `~/.gradle/gradle.properties`) |
 | Gizlilik politikası | https://fenpo.milvasoft.com/cast/privacy (`fenpo-website/cast/privacy.html`) |
-| Kaynak kodu | GPLv3 gereği yayımlanmış olmalı (bkz. §5) |
+| Kaynak kodu | https://github.com/Milvasoft/fenpocast (GPLv3 gereği açık, bkz. §5) |
 
 ## 2. Mağaza metinleri
 
@@ -56,7 +56,7 @@ Fenpo Cast hiçbir veri toplamaz. Hesap yok, sunucu yok, reklam ve takip yok; he
 
 iPhone ile TV aynı Wi-Fi ağında olmalı. DRM ile korunan film ve dizi içerikleri gönderilemez.
 
-Fenpo Cast açık kaynaktır (GNU GPL v3) ve UxPlay üzerine kuruludur. Apple ile bağlantılı değildir; iPhone, Apple Inc.'in ticari markasıdır.
+Fenpo Cast açık kaynaktır (GNU GPL v3, github.com/Milvasoft/fenpocast) ve UxPlay üzerine kuruludur. Apple ile bağlantılı değildir; iPhone, Apple Inc.'in ticari markasıdır.
 ```
 
 ### English (en-US)
@@ -93,7 +93,7 @@ Fenpo Cast collects no data. No accounts, no servers, no ads or tracking; everyt
 
 Your iPhone and TV need to be on the same Wi-Fi network. DRM-protected films and series cannot be sent.
 
-Fenpo Cast is open source (GNU GPL v3) and built on UxPlay. It is not affiliated with Apple; iPhone is a trademark of Apple Inc.
+Fenpo Cast is open source (GNU GPL v3, github.com/Milvasoft/fenpocast) and built on UxPlay. It is not affiliated with Apple; iPhone is a trademark of Apple Inc.
 ```
 
 ## 3. Grafikler

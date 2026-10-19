@@ -81,5 +81,5 @@
     <string name="settings_address">Ağ adresi</string>
     <string name="settings_address_none">Bağlı değil</string>
     <string name="settings_license">Lisans</string>
-    <string name="settings_license_value">GNU GPL v3. UxPlay, BoringSSL, libplist ve Apple\'ın ALAC çözücüsü üzerine kurulu.</string>
+    <string name="settings_license_value">GNU GPL v3. UxPlay, BoringSSL, libplist ve Apple\'ın ALAC çözücüsü üzerine kurulu. Kaynak kodu: github.com/Milvasoft/fenpocast</string>
 </resources>
