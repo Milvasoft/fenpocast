@@ -4,6 +4,14 @@ plugins {
     alias(libs.plugins.roborazzi)
 }
 
+// The Google Play upload key, shared with Fenpo for Android (Milvasoft's developer account).
+// Buğra keeps the keystore and its passwords outside the repository, in ~/.gradle/gradle.properties
+// or in environment variables. Without them the release build is signed with the debug key, which
+// is enough for sideloading with adb (docs/TESTING.md) but not for Play.
+fun secret(name: String): String? = providers.gradleProperty(name).orNull ?: providers.environmentVariable(name).orNull
+
+val uploadStore = secret("FENPO_UPLOAD_STORE_FILE")
+
 android {
     namespace = "com.fenpo.cast"
     compileSdk = 37
@@ -35,13 +43,23 @@ android {
         }
     }
 
+    signingConfigs {
+        if (uploadStore != null) {
+            create("upload") {
+                storeFile = file(uploadStore)
+                storePassword = secret("FENPO_UPLOAD_STORE_PASSWORD")
+                keyAlias = secret("FENPO_UPLOAD_KEY_ALIAS")
+                keyPassword = secret("FENPO_UPLOAD_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            // Sideloaded with adb until there is a store listing (docs/TESTING.md).
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName(if (uploadStore != null) "upload" else "debug")
         }
     }
 

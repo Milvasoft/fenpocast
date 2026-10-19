@@ -74,9 +74,9 @@ class ScreenshotTest {
     fun music() {
         val nowPlaying =
             NowPlaying(
-                title = "Gesi Bağları",
-                artist = "Zülfü Livaneli",
-                album = "Hoşgeldin",
+                title = "Kıyıda Bir Akşam",
+                artist = "Deniz Aral",
+                album = "Kıyı",
                 coverArt = cover(),
                 durationMs = 245_000,
                 positionMs = 83_000,
