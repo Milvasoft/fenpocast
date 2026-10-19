@@ -18,27 +18,10 @@
          Android 17 also asks for local network access. -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_LOCAL_NETWORK" />
     <!-- Wi-Fi low-latency lock during a session (receiver/LowLatencyWifi.kt). -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
-    <!-- Stays ready in the background and after the TV starts. -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
-    <!-- Lets the receiver bring the app forward when an iPhone connects while it is in the background. -->
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-
-    <!-- Checks whether this TV has a screen for "Display over other apps". -->
-    <queries>
-        <intent>
-            <action android:name="android.settings.action.MANAGE_OVERLAY_PERMISSION" />
-        </intent>
-    </queries>
 
     <application
         android:name=".FenpoCastApplication"
@@ -63,20 +46,6 @@
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <service
-            android:name=".service.ReceiverService"
-            android:exported="false"
-            android:foregroundServiceType="connectedDevice" />
-
-        <receiver
-            android:name=".service.BootReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
-            </intent-filter>
-        </receiver>
 
         <!-- Stores the per-app language for Android 12 and below; on 13+ the system keeps it. -->
         <service

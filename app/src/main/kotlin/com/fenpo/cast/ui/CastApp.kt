@@ -25,7 +25,6 @@ import com.fenpo.cast.ui.session.MusicScreen
 import com.fenpo.cast.ui.session.NoticeBanner
 import com.fenpo.cast.ui.session.PinOverlay
 import com.fenpo.cast.ui.session.StreamScreen
-import com.fenpo.cast.ui.settings.OverlayPermission
 import com.fenpo.cast.ui.settings.SettingsActions
 import com.fenpo.cast.ui.settings.SettingsScreen
 
@@ -49,7 +48,6 @@ fun CastApp(
     streamState: StreamState,
     settings: CastSettings,
     language: AppLanguage,
-    overlayPermission: OverlayPermission,
     actions: CastAppActions,
     modifier: Modifier = Modifier,
 ) {
@@ -77,7 +75,6 @@ fun CastApp(
                         settings = settings,
                         deviceName = state.deviceName,
                         language = language,
-                        overlayPermission = overlayPermission,
                         networkAddress = state.networkAddress,
                         actions = actions.settings,
                     )

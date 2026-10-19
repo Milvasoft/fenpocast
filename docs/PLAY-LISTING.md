@@ -12,7 +12,7 @@ Play Console'a girilecek her şey bu belgeden kopyalanır. Hesap: Milvasoft (kur
 | Tür | Uygulama, ücretsiz |
 | Kategori | Araçlar (Tools) |
 | Cihazlar | Yalnız Android TV (`android.software.leanback` zorunlu); telefon ve tablete çıkmaz |
-| Sürüm | `versionName` 1.0.0, `versionCode` 1. Her yüklemede `versionCode` artar |
+| Sürüm | `versionName` 1.0.0, `versionCode` 2 (1, servisli haliyle yüklenip yayımlanmadı). Her yüklemede `versionCode` artar |
 | Paket dosyası | `./gradlew :app:bundleRelease` → `app/build/outputs/bundle/release/app-release.aab` |
 | İmza | Play App Signing açık; yükleme anahtarı Fenpo for Android'inkiyle aynı (`FENPO_UPLOAD_*`, `~/.gradle/gradle.properties`) |
 | Gizlilik politikası | https://fenpo.milvasoft.com/cast/privacy (`fenpo-website/cast/privacy.html`) |
@@ -48,7 +48,6 @@ Video
 
 Kontrol sende
 • İstersen her bağlantıda TV'de görünen 4 haneli kodu iste.
-• TV açıldığında arka planda hazır bekler.
 • Açık ve koyu tema, Türkçe ve İngilizce.
 
 Gizlilik
@@ -85,7 +84,6 @@ Video
 
 You decide
 • Ask for a 4-digit code shown on the TV every time an iPhone connects, if you like.
-• Stays ready in the background when the TV starts.
 • Light and dark theme, Turkish and English.
 
 Privacy
@@ -118,9 +116,8 @@ Fenpo Cast is open source (GNU GPL v3, github.com/Milvasoft/fenpocast) and built
 | Hedef kitle | 13 yaş ve üzeri; çocuklara yönelik değil |
 | Data safety | Veri toplanmıyor ve paylaşılmıyor. iPhone'dan gelen görüntü ve ses TV'den dışarı çıkmaz; geliştiriciye hiçbir şey gelmez |
 | Haber uygulaması / kamu / finans / sağlık | Hayır |
-| Ön plan servisi (`connectedDevice`) | Aşağıdaki metin |
+| Ön plan servisi | Yok (DECISIONS #15); beyan çıkmaz |
 
-**connectedDevice (EN):** Fenpo Cast is a receiver for the user's iPhone on the local network. The foreground service keeps the receiver listening and advertised (mDNS) while the app is in the background and after the TV starts, so the TV stays in the iPhone's Screen Mirroring list; when the user's iPhone connects, the service receives the screen and audio stream and brings the app forward. The service shows an ongoing notification and the user can turn it off in Settings ("Stay ready in the background").
 
 ## 5. Lisans
 

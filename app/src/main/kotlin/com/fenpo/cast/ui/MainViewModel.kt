@@ -56,8 +56,6 @@ class MainViewModel(
 
     fun setDirectVideo(enabled: Boolean) = launch { settingsRepository.setDirectVideo(enabled) }
 
-    fun setKeepRunning(enabled: Boolean) = launch { settingsRepository.setKeepRunning(enabled) }
-
     fun setTheme(theme: ThemeMode) = launch { settingsRepository.setTheme(theme) }
 
     /** Switches the app language without a restart (AppCompat recreates the activity). */

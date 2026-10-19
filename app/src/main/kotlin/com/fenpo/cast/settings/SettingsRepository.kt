@@ -34,7 +34,6 @@ enum class ThemeMode {
  * @property requireCode Every connection needs the four-digit code shown on the TV.
  * @property quality Picture size asked of the iPhone.
  * @property directVideo Videos from apps such as YouTube play on the TV by themselves.
- * @property keepRunning Stays ready in the background and after the TV starts.
  * @property theme Görünüm setting.
  */
 data class CastSettings(
@@ -42,7 +41,6 @@ data class CastSettings(
     val requireCode: Boolean = false,
     val quality: VideoQuality = VideoQuality.Auto,
     val directVideo: Boolean = true,
-    val keepRunning: Boolean = true,
     val theme: ThemeMode = ThemeMode.System,
 )
 
@@ -60,7 +58,6 @@ class SettingsRepository(
                 requireCode = preferences[REQUIRE_CODE] ?: false,
                 quality = enumOrNull<VideoQuality>(preferences[QUALITY]) ?: VideoQuality.Auto,
                 directVideo = preferences[DIRECT_VIDEO] ?: true,
-                keepRunning = preferences[KEEP_RUNNING] ?: true,
                 theme = enumOrNull<ThemeMode>(preferences[THEME]) ?: ThemeMode.System,
             )
         }
@@ -73,8 +70,6 @@ class SettingsRepository(
     suspend fun setQuality(quality: VideoQuality) = edit { it[QUALITY] = quality.name }
 
     suspend fun setDirectVideo(enabled: Boolean) = edit { it[DIRECT_VIDEO] = enabled }
-
-    suspend fun setKeepRunning(enabled: Boolean) = edit { it[KEEP_RUNNING] = enabled }
 
     suspend fun setTheme(theme: ThemeMode) = edit { it[THEME] = theme.name }
 
@@ -106,7 +101,6 @@ class SettingsRepository(
         val REQUIRE_CODE = booleanPreferencesKey("require_code")
         val QUALITY = stringPreferencesKey("quality")
         val DIRECT_VIDEO = booleanPreferencesKey("direct_video")
-        val KEEP_RUNNING = booleanPreferencesKey("keep_running")
         val THEME = stringPreferencesKey("theme")
         val DEVICE_ID = stringPreferencesKey("device_id")
     }

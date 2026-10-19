@@ -53,22 +53,14 @@ import com.fenpo.cast.ui.AppLanguage
 import com.fenpo.cast.ui.theme.fenpoButtonColors
 import com.fenpo.cast.ui.theme.fenpoOutlinedButtonColors
 
-/** Whether the app may come forward by itself, and whether the TV has a screen to allow it. */
-data class OverlayPermission(
-    val granted: Boolean,
-    val canOpenSettings: Boolean,
-)
-
 /** Everything Settings can change, passed in by the activity. */
 data class SettingsActions(
     val setDeviceName: (String) -> Unit,
     val setRequireCode: (Boolean) -> Unit,
     val setQuality: (VideoQuality) -> Unit,
     val setDirectVideo: (Boolean) -> Unit,
-    val setKeepRunning: (Boolean) -> Unit,
     val setTheme: (ThemeMode) -> Unit,
     val setLanguage: (AppLanguage) -> Unit,
-    val openOverlaySettings: () -> Unit,
 )
 
 private enum class OpenDialog { None, Name, Quality, Theme, Language }
@@ -84,7 +76,6 @@ fun SettingsScreen(
     settings: CastSettings,
     deviceName: String,
     language: AppLanguage,
-    overlayPermission: OverlayPermission,
     networkAddress: String?,
     actions: SettingsActions,
     modifier: Modifier = Modifier,
@@ -149,34 +140,6 @@ fun SettingsScreen(
                     checked = settings.directVideo,
                     onCheckedChange = actions.setDirectVideo,
                     modifier = Modifier.row("video"),
-                )
-            }
-            item {
-                SwitchItem(
-                    title = stringResource(R.string.settings_keep_running),
-                    summary = stringResource(R.string.settings_keep_running_summary),
-                    checked = settings.keepRunning,
-                    onCheckedChange = actions.setKeepRunning,
-                    modifier = Modifier.row("keep"),
-                )
-            }
-            item {
-                val summary =
-                    when {
-                        overlayPermission.granted -> R.string.settings_open_automatically_on
-                        overlayPermission.canOpenSettings -> R.string.settings_open_automatically_off
-                        else -> R.string.settings_open_automatically_adb
-                    }
-                SettingItem(
-                    title = stringResource(R.string.settings_open_automatically),
-                    summary = stringResource(summary),
-                    value =
-                        stringResource(
-                            if (overlayPermission.granted) R.string.settings_on else R.string.settings_off,
-                        ),
-                    onClick = actions.openOverlaySettings,
-                    enabled = !overlayPermission.granted && overlayPermission.canOpenSettings,
-                    modifier = Modifier.row("open"),
                 )
             }
 

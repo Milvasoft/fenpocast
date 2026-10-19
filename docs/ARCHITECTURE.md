@@ -36,7 +36,7 @@ JNI yöntem adları ve imzaları `receiver.c` içindeki `cache_methods()` ile `N
 - `media/VideoDecoder.kt`: asenkron MediaCodec, her çıkış karesi geldiği anda gösterilir (`KEY_LOW_LATENCY`). Yüzey yokken (uygulama açılırken) son anahtar kareden beri gelen kareleri tutar ve yüzey gelince yeniden oynatır; böylece duran bir ekranda bir sonraki anahtar kareyi beklemeye gerek kalmaz. Parametre setleri değişirse (iPhone döndü) çözücüyü yeniden kurar.
 - `media/AudioRenderer.kt`: tek iş parçacığı, `AudioTrack`'in bloklayan yazması akışı hızlandırır (UxPlay'deki GStreamer saatinin karşılığı). Ses odağı alır.
 - `media/StreamPlayer.kt`: Media3 ExoPlayer. iPhone oynatma, duraklatma, sarma komutlarını verir; saniyede iki kez durum geri yollanır (iPhone'daki sürgü bundan çizilir).
-- `service/ReceiverService.kt`: `connectedDevice` ön plan servisi. Uygulama görünür değilken bir oturum başlarsa uygulamayı öne getirmeyi dener.
+- `MainActivity`: alıcıyı `onStart`'ta başlatır, `onStop`'ta durdurur; o sırada bir oturum sürüyorsa (müzik) oturum bitince durdurur. Ön plan servisi yok (DECISIONS #15).
 
 ## Tema ve dil
 

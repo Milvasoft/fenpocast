@@ -12,7 +12,7 @@ Fenpo ailesinin bir parçası ([Fenpo](https://github.com/Milvasoft/fenpo): tele
 | Müzik | Müzik ve podcast uygulamalarından ses (ALAC, AAC). Albüm kapağı, parça, sanatçı, ilerleme |
 | Video | YouTube gibi uygulamalar videoyu akış olarak TV'ye devreder; TV kendi başına oynatır, iPhone kilitlenebilir |
 | Kod ile bağlanma | İsteğe bağlı: her bağlantıda TV'de 4 haneli kod görünür |
-| Arka planda hazır | TV açıldığında iPhone'un listesinde görünür; izin verilirse bağlantı gelince kendiliğinden öne çıkar |
+| Açıkken hazır | Fenpo Cast açıkken TV iPhone'un listesinde görünür; çıkınca, çalan bir şey yoksa alıcı durur |
 
 DRM'li içerik (Netflix, Disney+, Apple TV+) gönderilemez; bu, kimsenin aşamadığı FairPlay Streaming kısıtıdır.
 

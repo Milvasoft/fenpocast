@@ -25,7 +25,6 @@ import com.fenpo.cast.ui.session.MusicScreen
 import com.fenpo.cast.ui.session.NoticeBanner
 import com.fenpo.cast.ui.session.PinOverlay
 import com.fenpo.cast.ui.session.StreamScreen
-import com.fenpo.cast.ui.settings.OverlayPermission
 import com.fenpo.cast.ui.settings.SettingsActions
 import com.fenpo.cast.ui.settings.SettingsScreen
 import com.fenpo.cast.ui.theme.FenpoCastTheme
@@ -63,9 +62,8 @@ class ScreenshotTest {
                 settings = CastSettings(),
                 deviceName = name,
                 language = AppLanguage.System,
-                overlayPermission = OverlayPermission(granted = false, canOpenSettings = true),
                 networkAddress = "192.168.1.42",
-                actions = SettingsActions({}, {}, {}, {}, {}, {}, {}, {}),
+                actions = SettingsActions({}, {}, {}, {}, {}, {}),
             )
         }
     }

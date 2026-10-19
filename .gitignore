@@ -11,3 +11,4 @@ captures/
 *.aab
 .DS_Store
 Thumbs.db
+store/upload/

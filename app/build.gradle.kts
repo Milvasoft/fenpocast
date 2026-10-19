@@ -22,7 +22,8 @@ android {
         // Android TV 9 is still common on set-top boxes; every API used above it is guarded.
         minSdk = 28
         targetSdk = 37
-        versionCode = 1
+        // 1 was uploaded to Play with the background service and never released.
+        versionCode = 2
         versionName = "1.0.0"
 
         ndk {
@@ -114,7 +115,6 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.lifecycle.service)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.exoplayer.hls)

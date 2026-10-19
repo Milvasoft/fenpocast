@@ -1,35 +1,35 @@
 package com.fenpo.cast
 
-import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.fenpo.cast.receiver.ReceiverController
-import com.fenpo.cast.service.ReceiverService
 import com.fenpo.cast.settings.ThemeMode
 import com.fenpo.cast.ui.CastApp
 import com.fenpo.cast.ui.CastAppActions
 import com.fenpo.cast.ui.MainViewModel
-import com.fenpo.cast.ui.settings.OverlayPermission
 import com.fenpo.cast.ui.settings.SettingsActions
 import com.fenpo.cast.ui.theme.FenpoCastTheme
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-/** The only activity: the home screen, Settings and whatever an iPhone is showing. */
+/**
+ * The only activity: the home screen, Settings and whatever an iPhone is showing.
+ *
+ * The receiver runs while this activity is on screen. When the user leaves, it stops at once if
+ * nothing is playing, otherwise when the iPhone ends the session (music keeps playing after the
+ * user goes back to the TV's home screen).
+ */
 class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
-    private var overlayPermission by mutableStateOf(OverlayPermission(granted = false, canOpenSettings = false))
+    private var stopWhenIdle: Job? = null
 
     private val localNetworkPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { viewModel.retry() }
@@ -45,10 +45,8 @@ class MainActivity : AppCompatActivity() {
                         setRequireCode = viewModel::setRequireCode,
                         setQuality = viewModel::setQuality,
                         setDirectVideo = viewModel::setDirectVideo,
-                        setKeepRunning = viewModel::setKeepRunning,
                         setTheme = viewModel::setTheme,
                         setLanguage = viewModel::setLanguage,
-                        openOverlaySettings = ::openOverlaySettings,
                     ),
                 grantLocalNetwork = { localNetworkPermission.launch(ReceiverController.LOCAL_NETWORK_PERMISSION) },
                 retry = viewModel::retry,
@@ -75,7 +73,6 @@ class MainActivity : AppCompatActivity() {
                     streamState = streamState,
                     settings = current,
                     language = language,
-                    overlayPermission = overlayPermission,
                     actions = actions,
                 )
             }
@@ -84,45 +81,20 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        isVisible = true
-        ReceiverService.start(this)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        overlayPermission =
-            OverlayPermission(
-                granted = Settings.canDrawOverlays(this),
-                canOpenSettings = overlaySettingsIntent().resolveActivity(packageManager) != null,
-            )
+        stopWhenIdle?.cancel()
+        stopWhenIdle = null
+        castApplication.receiverController.start()
     }
 
     override fun onStop() {
-        isVisible = false
-        val controller = castApplication.receiverController
-        lifecycleScope.launch {
-            val keepRunning =
-                castApplication.settingsRepository.settings
-                    .first()
-                    .keepRunning
-            if (!keepRunning && controller.state.value.session == null && !isChangingConfigurations) {
-                ReceiverService.stop(this@MainActivity)
-            }
+        if (!isChangingConfigurations) {
+            val controller = castApplication.receiverController
+            stopWhenIdle =
+                lifecycleScope.launch {
+                    controller.state.first { it.session == null }
+                    controller.stop()
+                }
         }
         super.onStop()
-    }
-
-    private fun overlaySettingsIntent() =
-        Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, "package:$packageName".toUri())
-
-    private fun openOverlaySettings() {
-        runCatching { startActivity(overlaySettingsIntent()) }
-    }
-
-    companion object {
-        /** True while the activity is on screen; the service uses it to decide whether to bring it forward. */
-        @Volatile
-        var isVisible: Boolean = false
-            private set
     }
 }

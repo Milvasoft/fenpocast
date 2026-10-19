@@ -30,13 +30,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -50,7 +46,7 @@ import java.util.Locale
 /**
  * Owns the receiver for the whole process: starts it with the current settings, restarts it when
  * a setting that the iPhone sees changes, and routes what the iPhone sends to the decoders.
- * The UI reads [state]; the foreground service decides when the receiver runs.
+ * The UI reads [state]; MainActivity decides when the receiver runs.
  */
 @OptIn(ExperimentalCoroutinesApi::class)
 class ReceiverController(
@@ -91,12 +87,6 @@ class ReceiverController(
 
     /** State of a handed-over video. */
     val streamState: StateFlow<StreamState> = streamPlayer.state
-
-    private val _sessionStarted =
-        MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
-
-    /** Emits when an iPhone starts showing something; the service brings the app forward. */
-    val sessionStarted: SharedFlow<Unit> = _sessionStarted.asSharedFlow()
 
     /** True while the receiver should be running. */
     val isRunning: Boolean get() = runJob != null
@@ -225,7 +215,6 @@ class ReceiverController(
             current.copy(session = next, pin = if (next != null) null else current.pin)
         }
         if (started) {
-            _sessionStarted.tryEmit(Unit)
             showNotice(Notice.Connected(clientName))
         }
     }
@@ -473,7 +462,6 @@ class ReceiverController(
                         delay(PIN_MS)
                         _state.update { if (it.pin == pin) it.copy(pin = null) else it }
                     }
-                _sessionStarted.tryEmit(Unit)
             }
         }
 
