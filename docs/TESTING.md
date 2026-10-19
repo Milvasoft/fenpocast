@@ -45,4 +45,5 @@ Her madde için sonuç `docs/TESTING.md` sonundaki tabloya yazılır. Cihazda de
 
 | Tarih | Cihaz | Android | iPhone / iOS | Madde | Sonuç |
 |---|---|---|---|---|---|
-| | | | | | |
+| 19 Ekim 2026 | Philips 2021/22 UHD Android TV (PH1M, armeabi-v7a) | 11 (API 30) | iPhone 13 (iPhone14,5), AirPlay 960.13.1 | 1, 2 | Çalışıyor: listede görünüyor, yansıtma görüntü ve sesle geliyor (Buğra) |
+| 19 Ekim 2026 | aynı | 11 | aynı | 5 | İlk sürümde başarısız (ters kanal kapanıyor, liste bulunamıyor); `a005e42` ile çalışıyor (Buğra) |
