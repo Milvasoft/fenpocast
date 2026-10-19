@@ -21,7 +21,7 @@ DRM'li içerik (Netflix, Disney+, Apple TV+) gönderilemez; bu, kimsenin aşamad
 Gerekenler: JDK 21, Android SDK (platform 37), NDK `30.0.16248370`, CMake `4.1.2`.
 
 ```bash
-git clone --recurse-submodules <repo-url>
+git clone --recurse-submodules https://github.com/Milvasoft/fenpocast.git
 ```
 
 ```bash
