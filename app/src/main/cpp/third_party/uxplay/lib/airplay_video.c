@@ -1223,6 +1223,21 @@ char * get_media_playlist(airplay_video_t *airplay_video, int *count, float *dur
     return NULL;
 }
 
+/* Fenpo Cast: true when the master playlist and every media playlist it lists have been stored. */
+bool airplay_video_playlists_complete(airplay_video_t *airplay_video) {
+    media_item_t *media_data_store = airplay_video->media_data_store;
+    if (!airplay_video->master_playlist || !media_data_store || airplay_video->num_uri <= 0) {
+        return false;
+    }
+    for (int i = 0; i < airplay_video->num_uri; i++) {
+        int stored = media_data_store[i].num;
+        if (stored < 0 || stored >= airplay_video->num_uri || !media_data_store[stored].playlist) {
+            return false;
+        }
+    }
+    return true;
+}
+
 char * get_media_uri_by_num(airplay_video_t *airplay_video, int num) {
     media_item_t * media_data_store = airplay_video->media_data_store;
     if (num >= 0 && num < airplay_video->num_uri) {

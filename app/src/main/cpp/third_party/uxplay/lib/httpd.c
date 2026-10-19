@@ -481,7 +481,10 @@ httpd_thread(void *arg)
                 connection->request = http_request_init();
                 assert(connection->request);
                 if (connection->type == CONNECTION_TYPE_PTTH) {
-                    http_request_is_reverse(connection->request);
+                    /* Fenpo Cast: upstream called the getter here, so every response after the first
+                       one on the reversed channel went to the parser, failed (HPE_INVALID_METHOD) and
+                       closed the channel; HLS playlist requests (FCUP) then had nowhere to go. */
+                    http_request_set_reverse(connection->request);
                 }
                 logger_log(httpd->logger, LOGGER_DEBUG, "new request, connection %d, socket %d type %s",
                            i, connection->socket_fd, typename [connection->type]);

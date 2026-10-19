@@ -39,6 +39,32 @@ object NalUnits {
         return units
     }
 
+    /**
+     * Key frame test that reads only the first NAL unit. The receiver puts the parameter sets in
+     * front of every key frame, so a key frame starts with SPS (H.264) or VPS/SPS (H.265), or with
+     * the IDR slice itself.
+     */
+    fun startsKeyFrame(
+        data: ByteArray,
+        h265: Boolean,
+    ): Boolean {
+        val offset = firstPayload(data)
+        if (offset < 0) return false
+        val type = typeOf(data, offset, h265)
+        return if (h265) {
+            type == H265_VPS || type == H265_SPS || type in H265_IDR_W_RADL..H265_CRA
+        } else {
+            type == H264_SPS || type == H264_IDR
+        }
+    }
+
+    private fun firstPayload(data: ByteArray): Int =
+        when {
+            data.size > 4 && data[0] == ZERO && data[1] == ZERO && data[2] == ZERO && data[3] == ONE -> 4
+            data.size > 3 && data[0] == ZERO && data[1] == ZERO && data[2] == ONE -> 3
+            else -> -1
+        }
+
     /** True when the access unit can start decoding: it carries parameter sets or an IDR slice. */
     fun isKeyFrame(
         units: List<Unit>,

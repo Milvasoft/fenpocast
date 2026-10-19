@@ -65,7 +65,9 @@ class ReceiverController(
     private val advertiser = ServiceAdvertiser(context, ::onAdvertiseFailed)
     private val nativeReceiver = NativeReceiver(Listener())
     private val audio = AudioRenderer(context)
-    private val streamPlayer = StreamPlayer(context, nativeReceiver::setPlaybackInfo, ::onStreamEnded)
+    private val streamPlayer =
+        StreamPlayer(context, nativeReceiver::setPlaybackInfo, ::onStreamEnded) { showNotice(Notice.StreamFailed) }
+    private val wifiLock = LowLatencyWifi(context)
 
     @Volatile
     private var video: VideoDecoder? = null
@@ -105,6 +107,10 @@ class ReceiverController(
         registerNetworkCallback()
         runJob =
             scope.launch {
+                // Wi-Fi power saving adds tens of milliseconds of jitter; keep it off during a session.
+                launch {
+                    state.map { it.session != null }.distinctUntilChanged().collect(wifiLock::setHeld)
+                }
                 settingsRepository.settings
                     .map { ReceiverInputs.from(it) }
                     .distinctUntilChanged()
@@ -116,6 +122,7 @@ class ReceiverController(
     fun stop() {
         runJob?.cancel()
         runJob = null
+        wifiLock.setHeld(false)
         scope.launch {
             endSession()
             withContext(receiverDispatcher) { nativeReceiver.stop() }

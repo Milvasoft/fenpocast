@@ -7,6 +7,7 @@ import android.media.MediaFormat
 import android.os.Build
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.Process
 import android.util.Log
 import android.view.Surface
 import java.nio.ByteBuffer
@@ -31,7 +32,8 @@ class VideoDecoder(
     private val maxHeight: Int,
     private val onPictureSize: (width: Int, height: Int) -> Unit,
 ) {
-    private val thread = HandlerThread("VideoDecoder").apply { start() }
+    // Display priority: a frame waiting on this thread is a frame late on screen.
+    private val thread = HandlerThread("VideoDecoder", Process.THREAD_PRIORITY_URGENT_DISPLAY).apply { start() }
     private val handler = Handler(thread.looper)
 
     // Everything below is touched on [thread] only.
@@ -102,10 +104,12 @@ class VideoDecoder(
         frame: ByteArray,
         h265: Boolean,
     ) {
-        val units = NalUnits.split(frame, h265)
-        val keyFrame = NalUnits.isKeyFrame(units, h265)
+        // Only the first NAL unit is looked at for ordinary frames; the whole access unit is split
+        // only for key frames, which are rare while mirroring.
+        val keyFrame = NalUnits.startsKeyFrame(frame, h265)
         val mime = if (h265) MediaFormat.MIMETYPE_VIDEO_HEVC else MediaFormat.MIMETYPE_VIDEO_AVC
         if (keyFrame) {
+            val units = NalUnits.split(frame, h265)
             val sets = NalUnits.parameterSets(frame, units, h265)
             // New parameter sets mean a new picture size (the iPhone rotated) or codec: start over.
             if ((sets != null && sets != parameterSets) || mime != codecMime) {

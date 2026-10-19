@@ -743,7 +743,10 @@ http_handler_play(raop_conn_t *conn, http_request_t *request, http_response_t *r
     int id = -1;
     id = get_playlist_by_uuid(raop, playback_uuid);
 
-    if (id >= 0 && !get_playback_location(raop->airplay_video[id])) {
+    /* Fenpo Cast: also start over when an earlier attempt stopped before every media playlist
+       arrived; reusing it made the player ask for playlists that were never fetched. */
+    if (id >= 0 && (!get_playback_location(raop->airplay_video[id]) ||
+                    !airplay_video_playlists_complete(raop->airplay_video[id]))) {
         raop_destroy_airplay_video(raop, id);
         id = -1;
     }

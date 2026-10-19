@@ -50,6 +50,16 @@ class NalUnitsTest {
     }
 
     @Test
+    fun `first unit tells key frames from ordinary frames`() {
+        assertTrue(NalUnits.startsKeyFrame(start + sps + start + pps + start + idr, h265 = false))
+        assertTrue(NalUnits.startsKeyFrame(start + idr, h265 = false))
+        assertFalse(NalUnits.startsKeyFrame(start + slice, h265 = false))
+        assertTrue(NalUnits.startsKeyFrame(start + byteArrayOf(0x40, 0x01, 0x0C), h265 = true))
+        assertFalse(NalUnits.startsKeyFrame(start + byteArrayOf(0x02, 0x01, 0xD0.toByte()), h265 = true))
+        assertFalse(NalUnits.startsKeyFrame(byteArrayOf(1, 0, 0, 1, 0x67), h265 = false))
+    }
+
+    @Test
     fun `equal parameter sets compare equal`() {
         assertEquals(ParameterSets(start + sps, start + pps), ParameterSets(start + sps, start + pps))
     }

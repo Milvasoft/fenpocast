@@ -18,6 +18,8 @@ Bunların dışındaki dosyalar upstream ile aynıdır; güncellerken bu liste y
 - **UxPlay `lib/`**
   - `CMakeLists.txt`, `dns_sd/`, `mdnsd/`, `playfair/CMakeLists.txt`, `llhttp/CMakeLists.txt` kaldırıldı. Derleme `app/src/main/cpp/CMakeLists.txt` ile yapılıyor; hizmet duyurusu `receiver/dnssd_android.c` üzerinden Android'in NsdManager'ına gidiyor.
   - `crypto.c` `pk_to_base64()`: BoringSSL'de `BIO_f_base64()` olmadığı için `EVP_EncodeBlock()` kullanılıyor (çıktı aynı).
+  - `httpd.c`: ters (PTTH) kanaldaki her yeni mesaj için `http_request_is_reverse()` yerine `http_request_set_reverse()` çağrılıyor. Upstream'de bu satır yalnız okuma yaptığı için iPhone'un ikinci cevabı istek gibi ayrıştırılıyor, `HPE_INVALID_METHOD` ile kanal kapanıyor ve YouTube'un oynatma listesi istekleri (FCUP) yarıda kalıyordu. Upstream'e bildirilmeli.
+  - `http_handlers.h`, `airplay_video.c/.h`: aynı video yeniden gönderildiğinde saklanan kayıt, bütün medya oynatma listeleri inmişse kullanılıyor (`airplay_video_playlists_complete()`); yarım kalmış bir denemeden sonra oynatıcı inmemiş listeleri istiyordu.
 - **libplist**: yalnız C kaynakları (`src/*.c`, `libcnary/`) ve `include/plist/plist.h` alındı; C++ sarmalayıcısı, araçlar ve testler alınmadı.
 - **ALAC**: yalnız çözücü dosyaları alındı, kodlayıcı ve `convert-utility` alınmadı.
 

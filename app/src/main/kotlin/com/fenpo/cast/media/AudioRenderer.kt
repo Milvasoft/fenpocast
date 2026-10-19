@@ -8,6 +8,7 @@ import android.media.AudioTrack
 import android.media.MediaCodec
 import android.media.MediaCodecInfo
 import android.media.MediaFormat
+import android.os.Process
 import android.util.Log
 import com.fenpo.cast.receiver.AudioFormat
 import java.nio.ByteBuffer
@@ -81,6 +82,7 @@ class AudioRenderer(
     }
 
     private fun run() {
+        Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO)
         while (true) {
             val command = queue.take()
             try {
@@ -202,7 +204,14 @@ class AudioRenderer(
                     .build(),
             ).setBufferSizeInBytes(bufferSize)
             .setTransferMode(AudioTrack.MODE_STREAM)
-            .build()
+            .setPerformanceMode(
+                // Lip sync while mirroring; music keeps the power-saving default.
+                if (newFormat == AudioFormat.AacEld) {
+                    AudioTrack.PERFORMANCE_MODE_LOW_LATENCY
+                } else {
+                    AudioTrack.PERFORMANCE_MODE_NONE
+                },
+            ).build()
     }
 
     private fun createAacDecoder(

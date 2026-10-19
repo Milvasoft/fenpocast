@@ -33,12 +33,14 @@ data class StreamState(
  * @param reportPlayback Receives playback state twice a second: duration and position in
  *   seconds, rate, whether the buffer is empty, whether it is full, whether the stream ended.
  * @param onEnded Called once when the stream plays to its end.
+ * @param onFailed Called when the stream cannot be played.
  */
 @OptIn(UnstableApi::class)
 class StreamPlayer(
     private val context: Context,
     private val reportPlayback: (Double, Double, Float, Boolean, Boolean, Boolean) -> Unit,
     private val onEnded: () -> Unit,
+    private val onFailed: () -> Unit,
 ) {
     private val handler = Handler(Looper.getMainLooper())
     private var player: ExoPlayer? = null
@@ -135,6 +137,7 @@ class StreamPlayer(
 
             override fun onPlayerError(error: PlaybackException) {
                 _state.value = _state.value.copy(failed = true, buffering = false)
+                onFailed()
             }
         }
 
